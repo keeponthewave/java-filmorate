@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 public class IsPresentOrAfterValidator implements ConstraintValidator<IsPresentOrAfter, LocalDate> {
     private LocalDate constraint;
+
     @Override
     public void initialize(IsPresentOrAfter constraintAnnotation) {
         constraint = LocalDate.parse(constraintAnnotation.value());

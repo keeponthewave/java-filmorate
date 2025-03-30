@@ -10,16 +10,24 @@ import java.time.LocalDate;
 public class User {
     private long id;
 
-    @Email
-    @NotBlank
+    @Email(groups = {Create.class, Update.class})
+    @NotBlank(groups = {Create.class})
     private String email;
 
-    @Pattern(regexp = "^\\S+$")
-    @NotBlank
+    @Pattern(regexp = "^\\S+$", groups = {Create.class, Update.class})
+    @NotBlank(groups = {Create.class, Update.class})
     private String login;
 
     private String name;
 
-    @PastOrPresent
+    @PastOrPresent(groups = {Create.class, Update.class})
     private LocalDate birthday;
+
+    public interface Create {
+
+    }
+
+    public interface Update {
+
+    }
 }

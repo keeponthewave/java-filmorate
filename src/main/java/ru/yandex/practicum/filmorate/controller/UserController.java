@@ -1,9 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -20,7 +20,7 @@ public class UserController {
     private long idCounter = 1L;
 
     @PostMapping
-    public ResponseEntity<?> createOne(@Valid @RequestBody User user) {
+    public ResponseEntity<?> createOne(@Validated(User.Create.class) @RequestBody User user) {
         user.setId(idCounter++);
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
@@ -31,10 +31,13 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateOne(@Valid @RequestBody User user) {
+    public ResponseEntity<?> updateOne(@Validated(User.Update.class) @RequestBody User user) {
         if (!usersMap.containsKey(user.getId())) {
             log.error("PUT /users requestBody={} 404 NOT FOUND", user);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            user.setEmail(usersMap.get(user.getId()).getEmail());
         }
         usersMap.put(user.getId(), user);
         log.info("PUT /users requestBody={} 200 OK", user);

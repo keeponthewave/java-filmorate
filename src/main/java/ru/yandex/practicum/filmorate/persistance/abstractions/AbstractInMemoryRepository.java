@@ -1,18 +1,16 @@
 package ru.yandex.practicum.filmorate.persistance.abstractions;
 
-import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.entities.Entity;
 import ru.yandex.practicum.filmorate.persistance.exceptions.NotFoundInStorageException;
-import ru.yandex.practicum.filmorate.usecases.abstractions.Repository;
+import ru.yandex.practicum.filmorate.application.repositories.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
-public abstract class AbstractInMemoryRepository<T extends Entity> implements Repository<T> {
-    private final Map<Long, T> storageMap = new HashMap<>();
+public abstract class AbstractInMemoryRepository<T extends Entity> implements Repository<T, Long> {
+    protected final Map<Long, T> storageMap = new HashMap<>();
 
     public T create(T postDto) {
         var id = getNextId();
@@ -22,7 +20,7 @@ public abstract class AbstractInMemoryRepository<T extends Entity> implements Re
     }
 
     @Override
-    public T get(long id) {
+    public T get(Long id) {
         if (!storageMap.containsKey(id)) {
             throw new NotFoundInStorageException(notFoundMessageFactory(id), id);
         }
@@ -40,7 +38,7 @@ public abstract class AbstractInMemoryRepository<T extends Entity> implements Re
     }
 
     @Override
-    public T delete(long id) {
+    public T delete(Long id) {
         if (!storageMap.containsKey(id)) {
             throw new NotFoundInStorageException(notFoundMessageFactory(id), id);
         }
@@ -55,7 +53,7 @@ public abstract class AbstractInMemoryRepository<T extends Entity> implements Re
     }
 
     @Override
-    public boolean has(long id) {
+    public boolean has(Long id) {
         return storageMap.containsKey(id);
     }
 

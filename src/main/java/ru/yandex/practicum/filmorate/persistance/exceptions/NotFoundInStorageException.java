@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 @Getter
 public class NotFoundInStorageException extends RuntimeException {
-    private final long id;
+    private final Long id;
 
     public NotFoundInStorageException(String message, long id) {
         super(message);
